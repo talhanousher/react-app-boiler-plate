@@ -1,10 +1,18 @@
+import React from 'react';
 import { Row, Col, Form, Input, Button, Checkbox } from 'antd';
+import { Link, useHistory } from "react-router-dom";
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import { setItem } from '../services/local-storage';
 
 export default function Register() {
+  const history = useHistory();
+
   const onFinish = (values) => {
-    setItem("user",JSON.stringify(values));
+    setItem("user", JSON.stringify(values));
+    setTimeout(() => {
+      history.push('/main/dashboard');
+    }, 1000)
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -14,67 +22,57 @@ export default function Register() {
   return (
     <div className="Register">
       <Row align="middle" className="register-form">
-        <Col span={12} offset={4}>
+        <Col span={6} offset={8}>
           <Form
-            name="basic"
-            labelCol={{
-              span: 8,
-            }}
-            wrapperCol={{
-              span: 16,
-            }}
+            name="normal_login"
+            className="login-form"
             initialValues={{
               remember: true,
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            autoComplete="off"
           >
             <Form.Item
-              label="Username"
               name="username"
               rules={[
                 {
                   required: true,
-                  message: 'Please input your username!',
+                  message: 'Please input your Username!',
                 },
               ]}
             >
-              <Input />
+              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
             </Form.Item>
             <Form.Item
-              label="Password"
               name="password"
               rules={[
                 {
                   required: true,
-                  message: 'Please input your password!',
+                  message: 'Please input your Password!',
                 },
               ]}
             >
-              <Input.Password />
+              <Input
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                type="password"
+                placeholder="Password"
+              />
+            </Form.Item>
+            <Form.Item>
+              <Form.Item name="remember" valuePropName="checked" noStyle>
+                <Checkbox>Remember me</Checkbox>
+              </Form.Item>
+
+              <Link className="login-form-forgot">
+                Forgot password
+              </Link>
             </Form.Item>
 
-            <Form.Item
-              name="remember"
-              valuePropName="checked"
-              wrapperCol={{
-                offset: 8,
-                span: 16,
-              }}
-            >
-              <Checkbox>Remember me</Checkbox>
-            </Form.Item>
-
-            <Form.Item
-              wrapperCol={{
-                offset: 8,
-                span: 16,
-              }}
-            >
-              <Button type="primary" htmlType="submit">
-                Submit
-        </Button>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" className="login-form-button">
+                Register
+              </Button>
+              Or <Link to="/auth/login">Already have an account!</Link>
             </Form.Item>
           </Form>
         </Col>
